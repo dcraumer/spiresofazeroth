@@ -43,42 +43,7 @@
     }
   ],
   "relics": [
-    {
-      "id": "perditions-blade",
-      "name": "Perdition's Blade",
-      "icon": "ability_rogue_dualweild",
-      "rarity": "epic",
-      "itemId": 18816,
-      "zone": null,
-      "class": "rogue",
-      "text": "Start each combat with 1 Combo Point. 25% chance on attack: apply 1 Poison.",
-      "triggers": {
-        "on_combat_start": [
-          {
-            "op": "gain_resource",
-            "resource": "combo",
-            "amount": 1
-          }
-        ],
-        "on_attack": [
-          {
-            "op": "conditional",
-            "if": {
-              "type": "chance",
-              "pct": 25
-            },
-            "then": [
-              {
-                "op": "apply",
-                "status": "poison",
-                "stacks": 1,
-                "target": "enemy"
-              }
-            ]
-          }
-        ]
-      }
-    },
+    {"id":"perditions-blade","name":"Perdition's Blade","icon":"inv_sword_04","rarity":"epic","itemId":18816,"zone":null,"class":"rogue","text":"Whenever you play an attack, 15% chance to deal 6 additional fire damage.","triggers":{"on_attack":[{"op":"conditional","if":{"type":"chance","pct":15},"then":[{"op":"damage","amount":6,"target":"enemy","school":"fire"}]}]}},
     {
       "id": "ravenholdt-slicer",
       "name": "Ravenholdt Slicer",

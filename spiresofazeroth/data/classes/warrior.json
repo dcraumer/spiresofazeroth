@@ -28,7 +28,7 @@
     {"id": "protection", "name": "Protection", "icon": "inv_shield_05", "text": "Block, taunts and counter-strikes from Defensive Stance."}
   ],
   "relics": [
-    {"id": "ironfoe", "name": "Ironfoe", "icon": "inv_hammer_04", "rarity": "rare", "itemId": 11684, "zone": null, "class": "warrior", "text": "20% chance on attack: gain 1 Energy.", "triggers": {"on_attack": [{"op": "conditional", "if": {"type": "chance", "pct": 20}, "then": [{"op": "gain_energy", "amount": 1}]}]}},
+    {"id":"ironfoe","name":"Ironfoe","icon":"inv_hammer_01","rarity":"epic","itemId":11684,"zone":null,"class":"warrior","text":"Whenever you play an attack, 15% chance to deal 8 additional damage.","triggers":{"on_attack":[{"op":"conditional","if":{"type":"chance","pct":15},"then":[{"op":"damage","amount":8,"target":"enemy"}]}]}},
     {"id": "bonereavers-edge", "name": "Bonereaver's Edge", "icon": "inv_sword_48", "rarity": "epic", "itemId": 17076, "zone": null, "class": "warrior", "text": "Start each combat with 20 Rage. 15% chance on attack: apply 1 Vulnerable.", "triggers": {"on_combat_start": [{"op": "gain_resource", "resource": "rage", "amount": 20}], "on_attack": [{"op": "conditional", "if": {"type": "chance", "pct": 15}, "then": [{"op": "apply", "status": "vulnerable", "stacks": 1, "target": "enemy"}]}]}}
   ],
   "starterDeck": [

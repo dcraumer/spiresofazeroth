@@ -21,7 +21,7 @@ export async function openGearBag(app) {
       body.append(h("p", { class: "gs-bag__empty" }, "Your gear bag is empty. Gear you take off, and new gear that would replace what you wear, waits here."));
       return;
     }
-    body.append(h("p", { class: "gs-bag__note" }, "Stored items do not provide effects until equipped. Hover an item to compare it with what you wear."));
+    body.append(h("p", { class: "gs-bag__note" }, `Stored items do not provide effects until equipped. ${matchMedia("(pointer: coarse)").matches ? "Press and hold" : "Hover"} an item to compare it with what you wear.`));
     for (const id of run.gearBag) {
       const item = data.relic(id);
       if (!item) continue;

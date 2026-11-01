@@ -106,6 +106,7 @@ function tick() {
     if (v.g <= 0 && v.t <= 0) { try { v.el.pause(); v.el.removeAttribute("src"); v.el.load(); } catch (e) { /* ignore */ } list.splice(i, 1); trace("music-end", { playing: list.length }); }
   }
   if (!music.length) { clearInterval(timer); timer = 0; }
+  else if (hidden && music.every((v) => v.el.paused)) { clearInterval(timer); timer = 0; } // backgrounded: visibilitychange restarts it
 }
 
 let playlist = [], pi = 0;

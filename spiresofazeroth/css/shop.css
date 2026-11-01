@@ -50,3 +50,10 @@
 .sp-portrait .sx-shop__foot { justify-content: center; padding-bottom: 24px; }
 .sp-portrait .sx-shop__foot .sp-wowbtn { --h: 76px; min-width: 280px; }
 .sp-portrait .sx-shop__leave .sp-wowbtn { --h: 76px; }
+
+/* touch screens have no hover tooltips: show what relics and potions do right on the ware */
+.sx-ware__desc { display: none; }
+@media (pointer: coarse) {
+  .sx-ware__body .sx-ware__desc { display: block; max-width: 100%; font-size: 19px; line-height: 1.2; color: #d9ccaa; }
+  .sp-portrait .sx-ware__body .sx-ware__desc { font-size: 24px; }
+}

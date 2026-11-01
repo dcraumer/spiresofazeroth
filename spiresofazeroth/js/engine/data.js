@@ -112,7 +112,9 @@ export function createData({ fetchJson }) {
     if (!z) { d.zoneMissing.add(id); return null; }
     const zone = await resolveZone(z);
     d.zones.set(id, zone);
-    for (const r of zone.relics || []) d.relicMap.set(r.id, { ...r, zone: r.zone || id, slot: slotOf(r) });
+    // A zone may re-list a global item (Hand of Justice, Orb of Deception...) with different text and effects. Overwriting the global
+    // definition when the zone loads changed items you already owned mid-run (and their tooltip), so the first definition wins.
+    for (const r of zone.relics || []) if (!d.relicMap.has(r.id)) d.relicMap.set(r.id, { ...r, zone: r.zone || id, slot: slotOf(r) });
     return zone;
   };
   // Spire shape for a zone: zone JSON `mapProfile` (id or inline object) > map-profiles.json profileByAct[zone act] > default. null = engine FULL_PROFILE.

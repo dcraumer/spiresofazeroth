@@ -354,7 +354,15 @@ export async function render(app) {
   function showTips() {
     const s = app.meta.settings;
     if (s.tipsSeen || st.done || !root.isConnected) return;
-    const tips = [
+    const touch = (() => { try { return matchMedia("(pointer: coarse)").matches; } catch (e) { return false; } })();
+    const tips = touch ? [
+      ["Play a card", "drag it onto an enemy, or tap the card and then the target."],
+      ["Energy", "the red orb refills every turn, so spend it all."],
+      ["Potions", "press a potion in the belt and drag the arrow onto an enemy, like a card."],
+      ["Intents", "the icon above an enemy is its next move; a sword and a number is an attack for that much."],
+      ["Details", "press and hold a relic, potion, status or gear icon to see what it does."],
+      ["End Turn", "tap the End Turn button."],
+    ] : [
       ["Play a card", "drag it onto an enemy, or click the card and then the target. Keys 1-9 pick a card."],
       ["Energy", "the red orb refills every turn, so spend it all."],
       ["Potions", "press a potion in the belt and drag the arrow onto an enemy, like a card. Esc cancels."],

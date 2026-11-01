@@ -1,5 +1,6 @@
 package com.thewowdb.spiresofazeroth;
 
+import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.webkit.WebResourceRequest;
@@ -39,6 +40,11 @@ public class MainActivity extends BridgeActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        // Phones: the game has a purpose-built portrait layout; in landscape it shrinks the whole 1920x1080 desktop layout to ~35%
+        // (card and item text around 5-8px). Tablets (600dp+) keep free rotation, where landscape is readable.
+        if (getResources().getConfiguration().smallestScreenWidthDp < 600) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
+        }
         super.onCreate(savedInstanceState);
         cacheRoot = new File(getCacheDir(), "remote-assets");
         bridge.setWebViewClient(

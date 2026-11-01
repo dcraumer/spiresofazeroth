@@ -59,22 +59,58 @@ function showTip(html, x, y) {
   tipEl.style.left = Math.max(6, Math.min(window.innerWidth - w - 6, x + 12)) + "px";
   tipEl.style.top = Math.max(6, Math.min(window.innerHeight - hgt - 6, y + 14)) + "px";
 }
+// Touch screens have no hover, so tips used to be mouse-only and a tap went straight to the action (a shop tap bought the ware unseen).
+// Press and hold (~0.45s) on touch/pen now shows the tip; the tap that ends the hold is swallowed so nothing gets bought or picked,
+// and the tip stays up until the next touch anywhere.
+const HOLD_MS = 450, HOLD_SLOP = 12;
+let touchTipUp = false;
+function dismissTouchTip() { if (touchTipUp) { touchTipUp = false; hideTip(); } }
+// eats the click that ends a hold; returns a remover called shortly after the finger lifts (some browsers send no click after a hold)
+function swallowNextClick() {
+  const eat = (e) => { e.preventDefault(); e.stopPropagation(); };
+  document.addEventListener("click", eat, { capture: true, once: true });
+  return () => setTimeout(() => document.removeEventListener("click", eat, { capture: true }), 400);
+}
 export function tip(el, html) {
   const show = (x, y) => showTip(typeof html === "function" ? html() : html, x, y); // html may be a getter for rows whose state changes (loot gear swap)
   if (!tipFullscreenListener) {
     document.addEventListener("fullscreenchange", () => {
       if (tipEl && tipEl.style.display === "block" && tipPoint) showTip(tipEl.innerHTML, tipPoint.x, tipPoint.y);
     });
+    // any new touch closes a held tip (capture, so it runs before the element's own handlers start a new hold)
+    document.addEventListener("pointerdown", (e) => { if (e.pointerType !== "mouse") dismissTouchTip(); }, true);
     tipFullscreenListener = true;
   }
   const hide = () => { if (tipOwner === el || !tipOwner) hideTip(); };
   const own = () => { tipOwner = el; guardTip(); };
   el.addEventListener("pointerenter", (e) => { if (e.pointerType === "mouse") { show(e.clientX, e.clientY); own(); } });
   el.addEventListener("pointermove", (e) => { if (e.pointerType === "mouse" && tipEl && tipEl.style.display === "block") show(e.clientX, e.clientY); });
-  el.addEventListener("pointerleave", hide);
-  el.addEventListener("focus", () => { const r = el.getBoundingClientRect(); show(r.left, r.bottom); own(); });
-  el.addEventListener("blur", hide);
-  el.addEventListener("pointerdown", hideTip);
+  el.addEventListener("pointerleave", (e) => { if (e.pointerType === "mouse") hide(); });
+  el.addEventListener("focus", () => { if (touchTipUp) return; const r = el.getBoundingClientRect(); show(r.left, r.bottom); own(); });
+  el.addEventListener("blur", () => { if (!touchTipUp) hide(); });
+  el.addEventListener("pointerdown", (e) => { if (e.pointerType === "mouse") hideTip(); });
+  // press and hold (touch / pen)
+  let hold = 0, start = null, release = null;
+  const cancelHold = () => { if (hold) { clearTimeout(hold); hold = 0; } start = null; if (release) { release(); release = null; } };
+  el.addEventListener("pointerdown", (e) => {
+    if (e.pointerType === "mouse") return;
+    cancelHold();
+    start = { x: e.clientX, y: e.clientY };
+    hold = setTimeout(() => {
+      hold = 0;
+      const r = el.getBoundingClientRect();
+      show(r.left, r.bottom);
+      tipOwner = el; touchTipUp = true;
+      release = swallowNextClick();
+      if (navigator.vibrate) try { navigator.vibrate(12); } catch (_) { /* optional */ }
+    }, HOLD_MS);
+  });
+  el.addEventListener("pointermove", (e) => {
+    if (start && (Math.abs(e.clientX - start.x) > HOLD_SLOP || Math.abs(e.clientY - start.y) > HOLD_SLOP)) cancelHold();
+  });
+  el.addEventListener("pointerup", cancelHold);
+  el.addEventListener("pointercancel", cancelHold);
+  el.addEventListener("contextmenu", (e) => { if (touchTipUp || hold) e.preventDefault(); }); // no Android long-press menu over the tip
   return el;
 }
 export const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));

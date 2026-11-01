@@ -58,13 +58,13 @@ export function shopPanel(app, shop, redraw, hooks = {}) {
     const r = data.relic(it.id) || { name: it.id, text: "" };
     const inner = h("div", { class: "sx-ware__ico" }, ico(r.icon, { size: "lg", q: qClass(r.rarity) }));
     tip(inner, `<b>${esc(r.name)}</b><br>${esc(r.text)}`);
-    return ware("relic", i, it, h("div", { class: "sx-ware__body" }, inner, h("b", { class: qClass(r.rarity) }, r.name)), r.icon, ".sx-bar .gs-strip, .sx-bar__strip");
+    return ware("relic", i, it, h("div", { class: "sx-ware__body" }, inner, h("b", { class: qClass(r.rarity) }, r.name), h("small", { class: "sx-ware__desc" }, r.text || "")), r.icon, ".sx-bar .gs-strip, .sx-bar__strip");
   });
   const pots = shop.potions.map((it, i) => {
     const p = data.potion(it.id) || { name: it.id, text: "" };
     const inner = h("div", { class: "sx-ware__ico" }, ico(p.icon, { size: "lg" }));
     tip(inner, `<b>${esc(p.name)}</b><br>${esc(p.text)}`);
-    return ware("potion", i, it, h("div", { class: "sx-ware__body" }, inner, h("b", {}, p.name)), p.icon, ".sx-bar__pots");
+    return ware("potion", i, it, h("div", { class: "sx-ware__body" }, inner, h("b", {}, p.name), h("small", { class: "sx-ware__desc" }, p.text || "")), p.icon, ".sx-bar__pots");
   });
   // card removal service
   const rmSold = !!shop.removed, rmAfford = run.gold >= shop.removePrice;

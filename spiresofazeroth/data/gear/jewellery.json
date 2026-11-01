@@ -3,19 +3,19 @@
   {
    "id": "hand-of-justice",
    "name": "Hand of Justice",
-   "icon": "spell_holy_fistofjustice",
-   "rarity": "rare",
+   "icon": "inv_jewelry_talisman_01",
+   "rarity": "epic",
    "itemId": 11815,
    "zone": null,
    "class": null,
-   "text": "Each card played has a 10% chance to grant 1 Energy.",
+   "text": "Whenever you play an attack, 15% chance to gain 1 energy.",
    "triggers": {
-    "on_card_played": [
+    "on_attack": [
      {
       "op": "conditional",
       "if": {
        "type": "chance",
-       "pct": 10
+       "pct": 15
       },
       "then": [
        {
@@ -33,23 +33,16 @@
    "id": "blackhands-breadth",
    "name": "Blackhand's Breadth",
    "icon": "inv_jewelry_talisman_06",
-   "rarity": "rare",
+   "rarity": "epic",
    "itemId": 13965,
    "zone": null,
    "class": null,
-   "text": "Gain 4 Block at combat start. Fear is removed from you at turn start.",
+   "text": "Gain 2 Block at the start of each turn.",
    "triggers": {
-    "on_combat_start": [
-     {
-      "op": "block",
-      "amount": 4,
-      "target": "self"
-     }
-    ],
     "on_turn_start": [
      {
-      "op": "remove",
-      "status": "fear",
+      "op": "block",
+      "amount": 2,
       "target": "self"
      }
     ]
@@ -134,35 +127,32 @@
   {
    "id": "royal-seal-of-eldrethalas",
    "name": "Royal Seal of Eldre'Thalas",
-   "icon": "inv_jewelry_ring_36",
-   "rarity": "epic",
+   "icon": "inv_jewelry_ring_03",
+   "rarity": "rare",
    "itemId": null,
    "zone": null,
    "class": null,
-   "text": "First turn of each combat: gain 1 Energy and draw 1 card.",
+   "text": "Start each combat with 6 Block. Your first card each turn costs 1 less (min 0).",
    "triggers": {
+    "on_combat_start": [
+     {
+      "op": "block",
+      "amount": 6,
+      "target": "self"
+     }
+    ],
     "on_turn_start": [
      {
-      "op": "conditional",
-      "if": {
-       "type": "turn_number",
-       "eq": 1
-      },
-      "then": [
-       {
-        "op": "gain_energy",
-        "amount": 1
-       },
-       {
-        "op": "draw",
-        "count": 1
-       }
-      ]
+      "op": "apply",
+      "status": "energized",
+      "stacks": 1,
+      "target": "self"
      }
     ]
    },
    "slot": "finger",
-   "tier": 0
+   "tier": 0,
+   "itemIdSource": "unverified"
   },
   {
    "id": "briarwood-reed",
@@ -188,18 +178,17 @@
   {
    "id": "zandalarian-hero-charm",
    "name": "Zandalarian Hero Charm",
-   "icon": "inv_misc_stonetablet_05",
+   "icon": "inv_jewelry_talisman_06",
    "rarity": "epic",
-   "itemId": 19950,
+   "itemId": 19948,
    "zone": null,
    "class": null,
-   "text": "Whenever you kill an enemy, heal 4 HP.",
+   "text": "Draw 1 extra card at the start of each turn.",
    "triggers": {
-    "on_kill": [
+    "on_turn_start": [
      {
-      "op": "heal",
-      "amount": 4,
-      "target": "self"
+      "op": "draw",
+      "count": 1
      }
     ]
    },
@@ -658,19 +647,17 @@
   {
    "id": "hazzarahs-charm-of-magic",
    "name": "Hazza'rah's Charm of Magic",
-   "icon": "inv_jewelry_talisman_10",
-   "rarity": "epic",
-   "itemId": 19959,
+   "icon": "inv_misc_gem_pearl_04",
+   "rarity": "rare",
+   "itemId": null,
    "zone": null,
    "class": null,
-   "text": "At combat start add a free random card to your hand.",
+   "text": "At the start of combat, gain 1 energy next turn.",
    "triggers": {
     "on_combat_start": [
      {
-      "op": "random_card",
-      "pool": "class",
-      "to": "hand",
-      "cost": 0
+      "op": "energy_next_turn",
+      "amount": 1
      }
     ]
    },
@@ -1191,26 +1178,18 @@
   {
    "id": "renatakis-charm-of-beasts",
    "name": "Renataki's Charm of Beasts",
-   "icon": "inv_misc_idol_02",
-   "rarity": "rare",
-   "itemId": 19961,
+   "icon": "inv_jewelry_talisman_01",
+   "rarity": "epic",
+   "itemId": null,
    "zone": null,
    "class": null,
-   "text": "Attacks have a 20% chance to grant 1 Energy next turn.",
+   "text": "Gain 4 Block whenever you kill an enemy.",
    "triggers": {
-    "on_attack": [
+    "on_kill": [
      {
-      "op": "conditional",
-      "if": {
-       "type": "chance",
-       "pct": 20
-      },
-      "then": [
-       {
-        "op": "energy_next_turn",
-        "amount": 1
-       }
-      ]
+      "op": "block",
+      "amount": 4,
+      "target": "self"
      }
     ]
    },
@@ -1281,30 +1260,18 @@
   {
    "id": "argent-dawn-commission",
    "name": "Argent Dawn Commission",
-   "icon": "inv_jewelry_talisman_12",
+   "icon": "inv_jewelry_talisman_06",
    "rarity": "rare",
    "itemId": 12846,
    "zone": null,
    "class": null,
-   "text": "Attacks against undead and demons deal 4 extra Holy damage.",
+   "text": "Heal 3 HP at the start of each turn.",
    "triggers": {
-    "on_attack": [
+    "on_turn_start": [
      {
-      "op": "conditional",
-      "if": {
-       "type": "target_is_family",
-       "family": [
-        "undead",
-        "demon"
-       ]
-      },
-      "then": [
-       {
-        "op": "damage",
-        "amount": 4,
-        "school": "holy"
-       }
-      ]
+      "op": "heal",
+      "amount": 3,
+      "target": "self"
      }
     ]
    },
@@ -1553,27 +1520,19 @@
   {
    "id": "orb-of-deception",
    "name": "Orb of Deception",
-   "icon": "inv_misc_orb_03",
+   "icon": "inv_misc_orb_purple",
    "rarity": "rare",
    "itemId": null,
    "zone": null,
    "class": null,
-   "text": "When you take damage, 20% chance to gain 6 Block.",
+   "text": "Gain 1 Dexterity at the start of combat.",
    "triggers": {
-    "on_damage_taken": [
+    "on_combat_start": [
      {
-      "op": "conditional",
-      "if": {
-       "type": "chance",
-       "pct": 20
-      },
-      "then": [
-       {
-        "op": "block",
-        "amount": 6,
-        "target": "self"
-       }
-      ]
+      "op": "apply",
+      "status": "dexterity",
+      "stacks": 1,
+      "target": "self"
      }
     ]
    },
