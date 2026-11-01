@@ -170,3 +170,21 @@
 .gs-bag__vs--free { color: #1eff00 !important; }
 @media (prefers-reduced-motion: reduce) { .lf-chip { transition: none; } }
 .sp-reduce .lf-chip { transition: none; }
+
+/* ----- gear bag: readable on phones (Android app, mobile browsers) ----- */
+/* On touch screens every modal button is forced to 124px tall with a 3.2x minimum width (~400px each), so the two "Equip 1 / Equip 2"
+   buttons took most of the row and squeezed the item text into a narrow left column. Let the row wrap so the buttons drop under the text. */
+.gs-bag__item { flex-wrap: wrap; }
+.gs-bag__info { flex: 1 1 420px; }
+.gs-bag__btns { flex-wrap: wrap; margin-left: auto; }
+@media (max-width: 900px), (max-height: 520px) {
+  .gs-bag__btns { flex: 1 0 100%; justify-content: flex-end; gap: 16px; }
+  .gs-bag__btns .sp-wowbtn { min-width: 0; font-size: 34px; }
+  .gs-bag__item { gap: 16px 24px; padding: 20px 24px; }
+  .gs-bag__item > img { width: 104px; height: 104px; }
+  .gs-bag__info { gap: 8px; }
+  .gs-bag__info b { font-size: 46px; line-height: 1.15; }
+  .gs-bag__info span, .gs-bag__info .gs-bag__vs { font-size: 32px; }
+  .gs-bag__info p { font-size: 36px; line-height: 1.3; }
+  .gs-bag__hint, .gs-bag .gs-bag__note, .gs-bag__empty { font-size: 32px; }
+}
